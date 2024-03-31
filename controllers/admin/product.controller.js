@@ -2,7 +2,7 @@
     const Product = require("../../models/products-model");
     const filterStatusHelper = require("../../helpers/filterStatus");
     const searchHelper = require("../../helpers/search");
-
+    const paginationHelper = require("../../helpers/pagination");
 
     module.exports.product = async (req, res) => {
         
@@ -29,22 +29,15 @@
 
 
 
-        // phần phân trang 
-        let objectPagination = {
+    // phần phân trang 
+        const countProduct = await Product.countDocuments(find);  // đếm tổng số sản phẩm
+
+        let objectPagination = paginationHelper({
             limitItem: 4,   // sl phần tử mỗi trang
             currentPage:1
-        };
+        }, req.query , countProduct);
     
-        if(req.query.page){
-            objectPagination.currentPage = parseInt(req.query.page);
-        }
-
-        objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItem;
-
-        const countProduct = await Product.countDocuments(find);  // đếm tổng số sản phẩm
-        const totalPage =Math.ceil(countProduct/objectPagination.limitItem);
-        objectPagination.totalPage = totalPage;
-        // end phần phân trang 
+    // end phần phân trang 
 
 
         const product = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);   //limit là số lượng phần tử hiển thị
