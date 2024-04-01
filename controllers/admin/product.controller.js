@@ -1,10 +1,10 @@
-    // [GET] admin/product
     const Product = require("../../models/products-model");
     const filterStatusHelper = require("../../helpers/filterStatus");
     const searchHelper = require("../../helpers/search");
     const paginationHelper = require("../../helpers/pagination");
 
-    module.exports.product = async (req, res) => {
+    // [GET] admin/product
+module.exports.product = async (req, res) => {
         
         //đoạn bộ lọc
     const filterStatus =  filterStatusHelper(req.query);
@@ -49,4 +49,15 @@
             keyword:objectSearch.keyword,
             pagination:objectPagination
         }); 
-    }
+}
+
+    // [GET] admin/product/changeStatus/:status/:id
+module.exports.changeStatus = async (req, res) =>{
+    const status = req.params.status;
+    const id = req.params.id;
+
+    await Product.updateOne({_id: id},{status: status});
+
+   
+    res.redirect("back");  // Express đọc tài liệu response
+}

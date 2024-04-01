@@ -42,9 +42,21 @@ block main
                             td #{item.price}$
                             td 
                                 if(item.status == "active")
-                                    a(href="#" class="badge badge-success") Hoạt động
+                                    a(
+                                        href="javascript:;"
+                                        data-status=item.status   
+                                        data-id=item.id
+                                        button-changeStatus
+                                        class="badge badge-success"
+                                    ) Hoạt động
                                 else
-                                    a(href="#" class="badge badge-danger") Dừng hoạt động
+                                    a(
+                                        href="javascript:;"
+                                        data-status=item.status   
+                                        data-id=item.id
+                                        button-changeStatus
+                                        class="badge badge-danger"
+                                    ) Dừng hoạt động
                                 
                             td
                                 button(class="btn btn-warning btn-sm") Sửa
@@ -52,3 +64,11 @@ block main
 
 
     +pagination(pagination)
+
+    form(
+        action=""
+        method="POST"
+        id="form-change-status"
+        data-path=`${prefixadmin}/products/changeStatus`)
+
+    script(src="/admin/js/product.js") 
