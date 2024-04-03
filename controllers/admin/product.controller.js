@@ -3,7 +3,7 @@
     const searchHelper = require("../../helpers/search");
     const paginationHelper = require("../../helpers/pagination");
 
-    // [GET] admin/product
+    // [GET] /admin/product
 module.exports.product = async (req, res) => {
         
         //đoạn bộ lọc
@@ -51,7 +51,7 @@ module.exports.product = async (req, res) => {
         }); 
 }
 
-    // [GET] admin/product/changeStatus/:status/:id
+    // [PATCH] /admin/product/changeStatus/:status/:id
 module.exports.changeStatus = async (req, res) =>{
     const status = req.params.status;
     const id = req.params.id;
@@ -61,3 +61,24 @@ module.exports.changeStatus = async (req, res) =>{
    
     res.redirect("back");  // Express đọc tài liệu response
 }
+
+
+    // [PATCH] /admin/product/change-multi
+    module.exports.changeMulti = async (req, res) =>{
+
+        const type = req.body.type;
+        const ids = req.body.ids.split(", ");
+
+        switch (type) {
+            case "active":
+                await Product.updateMany({ _id: { $in: ids } }, {status:'active'});
+                break;
+            case "inactive":
+                await Product.updateMany({ _id: { $in: ids } }, {status:'inactive'});
+                break;
+            default:
+                break;
+        }
+
+        res.redirect("back"); 
+    };
