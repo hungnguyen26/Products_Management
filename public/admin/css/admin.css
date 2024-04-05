@@ -61,3 +61,41 @@
 .ml-1{
     margin: 0.25rem;
 }
+
+
+/* thông báo */
+[show-alert]{
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    z-index: 9999;
+}
+
+[show-alert].alert-hidden{
+    animation-duration: 0.5s;
+    animation-name: alert-hidden;
+    animation-fill-mode: both;
+}
+
+@keyframes alert-hidden {
+    from{
+        right: 15px;
+    }
+    to{
+        right:-100%;
+        display: none;
+    }
+}
+
+[show-alert] [close-alert]{
+    background: #ffffffc4;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+    font-weight: 600;
+    border-radius: 50%;
+    cursor: pointer;
+}
+/* end thông báo */

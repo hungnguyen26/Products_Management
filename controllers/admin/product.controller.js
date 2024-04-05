@@ -61,7 +61,8 @@ module.exports.changeStatus = async (req, res) =>{
 
     await Product.updateOne({_id: id},{status: status});
 
-   
+    req.flash('success', 'Cập nhật trạng thái sản phẩm thành công!');
+    
     res.redirect("back");  // Express đọc tài liệu response
 }
 
@@ -75,15 +76,18 @@ module.exports.changeMulti = async (req, res) =>{
     switch (type) {
         case "active":
             await Product.updateMany({ _id: { $in: ids } }, {status:'active'});
+            req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
             break;
         case "inactive":
             await Product.updateMany({ _id: { $in: ids } }, {status:'inactive'});
+            req.flash('success', `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`);
             break;
         case "delete-all":     // xóa nhiều
             await Product.updateMany({ _id: { $in: ids } }, {
                 deleted: true,
                 deletedAt: new Date()
             });
+            req.flash('success', 'Xóa sản phẩm thành công!');
             break;
         case "change-position":    
             for (const item of ids) {
