@@ -101,7 +101,8 @@ if(formChangeMulti){
 
 
         const typeChange = event.target.elements.type.value;
-        console.log(typeChange);
+
+        // console.log(typeChange);
         if(typeChange == "delete-all"){
             const isConfirm = confirm("Bạn có chắc xóa những sản phẩm này")
 
@@ -117,10 +118,19 @@ if(formChangeMulti){
 
             inputCheck.forEach((input)=>{
                 const id = input.value;
-                Ids.push(id);
+
+                if(typeChange == "change-position"){
+                    const position = input.closest("tr").querySelector('input[name = "position"]').value;
+                    console.log(position);
+                   
+                    console.log(`${id}-${position}`);
+                    Ids.push(`${id}-${position}`);
+                }else{
+                    Ids.push(id);
+                }
+
             })
 
-            // console.log(Ids.join(", "));
 
             inputIDS.value = Ids.join(", ");
 

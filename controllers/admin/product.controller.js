@@ -40,7 +40,10 @@ module.exports.product = async (req, res) => {
     // end phần phân trang 
 
 
-        const product = await Product.find(find).limit(objectPagination.limitItem).skip(objectPagination.skip);   //limit là số lượng phần tử hiển thị
+        const product = await Product.find(find)
+            .sort({position: "desc"})
+            .limit(objectPagination.limitItem)
+            .skip(objectPagination.skip);   //limit là số lượng phần tử hiển thị
 
         res.render("admin/pages/product/index.pug",{
             pageTitle: "Trang danh sách sản phẩm",
@@ -82,12 +85,22 @@ module.exports.changeMulti = async (req, res) =>{
                 deletedAt: new Date()
             });
             break;
+        case "change-position":    
+            for (const item of ids) {
+                let [id, position] = item.split("-");
+                position = parseInt(position);
+
+                await Product.updateOne({ _id: id }, {position:position});
+            }
+            break;
         default:
             break;
     }
 
     res.redirect("back"); 
 };
+
+
 
     // [DELETE] /admin/product/delete
 module.exports.deleteItem = async (req, res) =>{
