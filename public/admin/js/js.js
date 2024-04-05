@@ -94,10 +94,21 @@ const formChangeMulti = document.querySelector("[form-change-multi]");
 if(formChangeMulti){
     formChangeMulti.addEventListener("submit",(event)=>{
         event.preventDefault();      // k load lại trang, ngăn hành động mặc định
-        console.log(event);
+        // console.log(event);
 
         const checkBoxMulti = document.querySelector("[checkbox-multi ]");
         const inputCheck = checkBoxMulti.querySelectorAll('input[name = "id"]:checked');
+
+
+        const typeChange = event.target.elements.type.value;
+        console.log(typeChange);
+        if(typeChange == "delete-all"){
+            const isConfirm = confirm("Bạn có chắc xóa những sản phẩm này")
+
+            if(!isConfirm){
+                return;
+            }
+        }
 
         if(inputCheck.length > 0){
             let Ids = [];   
