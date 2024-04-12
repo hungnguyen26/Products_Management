@@ -56,14 +56,26 @@ block main
                 value="0"
                 min="0"
             ) 
-        div(class="form-group")
+        div(
+            class="form-group"
+            upload-img
+        )
             label(for="thumbnail") Ảnh
             input(
                 type="file"
                 class="form-control-file"
                 id="thumbnail"
                 name="thumbnail"
-            ) 
+                accept="image/*"
+                upload-img-input
+            )
+            
+            img(
+                src=""
+                upload-img-preview
+                class="img-preview"
+            )
+            button(class ="delete-img btn btn-danger") Xóa ảnh
         div(class="form-group")
             label(for="position") Vị trí
             input(

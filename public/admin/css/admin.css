@@ -99,3 +99,18 @@
     cursor: pointer;
 }
 /* end thông báo */
+
+/* img preview */
+.img-preview{
+    width: 150px;
+    height: auto;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+}
+.img-preview[src=""]{
+    display: none;
+}
+
+/* end img preview */
