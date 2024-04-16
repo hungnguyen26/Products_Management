@@ -21,7 +21,7 @@ const port = process.env.PORT;
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
 // khởi tạo thư viện flash: (hiển thị ra thông báo bên fe)
@@ -32,7 +32,7 @@ app.use(flash());
 
 //app local variable
 app.locals.prefixadmin = systemConfix.prefixAdmin;
-app.use(express.static('public')) 
+app.use(express.static(`${__dirname}/public`)) 
 
 
 app.use(methodOverride('_method'));
