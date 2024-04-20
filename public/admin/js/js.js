@@ -160,8 +160,6 @@ if (showAlert) {
 }
 // end thông báo
 
-
-
 // preview upload ảnh
 const uploadImg = document.querySelector("[upload-img]");
 if (uploadImg) {
@@ -184,5 +182,44 @@ if (uploadImg) {
     uploadImgpreview.src = "";
   });
 }
-
 // end preview upload ảnh
+
+// sort
+const sort = document.querySelector("[sort]");
+if (sort) {
+  let url = new URL(window.location.href);
+
+  const sortSelect = sort.querySelector("[sort-select]");
+  const sortClear = sort.querySelector("[sort-clear]");
+  // sắp xếp
+  sortSelect.addEventListener("change", (event) => {
+    const value = event.target.value;
+
+    const [sortKey, sortValue] = value.split("-");
+
+    url.searchParams.set("sortKey", sortKey);
+    url.searchParams.set("sortValue", sortValue);
+
+    window.location.href = url.href;
+    // xóa sắp xếp
+    sortClear.addEventListener("click", () => {
+      url.searchParams.delete("sortKey");
+      url.searchParams.delete("sortValue");
+
+      window.location.href = url.href;
+    });
+  });
+
+  // thêm selected cho option
+  const sortKey = url.searchParams.get("sortKey");
+  const sortValue = url.searchParams.get("sortValue");
+
+  if(sortValue && sortKey ){
+  const sortValue = url.searchParams.get("sortValue");
+    const StringSort = `${sortKey}-${sortValue}`;
+    
+    const optionSelected = sortSelect.querySelector(`option[value = '${StringSort}']`);
+    optionSelected.selected = true;
+  }
+}
+// end sort

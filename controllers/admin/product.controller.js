@@ -6,52 +6,59 @@ const systemConfig = require("../../config/system");
 
 // [GET] /admin/product
 module.exports.product = async (req, res) => {
-  //đoạn bộ lọc
-  const filterStatus = filterStatusHelper(req.query);
-  //    console.log(filterStatus);
+    //đoạn bộ lọc
+    const filterStatus = filterStatusHelper(req.query);
+    //    console.log(filterStatus);
 
-  let find = {
-    deleted: false,
-  };
+    let find = {
+      deleted: false,
+    };
 
-  if (req.query.status) {
-    find.status = req.query.status; // truyển thêm 1 key status vào obj find
-  }
-  //end đoạn bộ lọc
+    if (req.query.status) {
+      find.status = req.query.status; // truyển thêm 1 key status vào obj find
+    }
+    //end đoạn bộ lọc
 
-  // phần tìm kiếm
-  const objectSearch = searchHelper(req.query);
-  if (objectSearch.regex) {
-    find.title = objectSearch.regex;
-  }
-  // end phần tìm kiếm
+    // phần tìm kiếm
+    const objectSearch = searchHelper(req.query);
+    if (objectSearch.regex) {
+      find.title = objectSearch.regex;
+    }
+    // end phần tìm kiếm
 
-  // phần phân trang
-  const countProduct = await Product.countDocuments(find); // đếm tổng số sản phẩm
+    // phần phân trang
+    const countProduct = await Product.countDocuments(find); // đếm tổng số sản phẩm
+    let objectPagination = paginationHelper(
+      {
+        limitItem: 4, // sl phần tử mỗi trang
+        currentPage: 1,
+      },
+      req.query,
+      countProduct
+    );
+    // end phần phân trang
 
-  let objectPagination = paginationHelper(
-    {
-      limitItem: 4, // sl phần tử mỗi trang
-      currentPage: 1,
-    },
-    req.query,
-    countProduct
-  );
+    // sort
+    let sort = {};
+    if(req.query.sortKey && req.query.sortValue){
+      sort[req.query.sortKey] = req.query.sortValue;
+    }else{
+      sort.position = "desc";
+    }
+    // end sort
 
-  // end phần phân trang
+    const product = await Product.find(find)
+      .sort(sort)
+      .limit(objectPagination.limitItem)
+      .skip(objectPagination.skip); //limit là số lượng phần tử hiển thị
 
-  const product = await Product.find(find)
-    .sort({ position: "desc" })
-    .limit(objectPagination.limitItem)
-    .skip(objectPagination.skip); //limit là số lượng phần tử hiển thị
-
-  res.render("admin/pages/product/index.pug", {
-    pageTitle: "Trang danh sách sản phẩm",
-    products: product,
-    filterStatus: filterStatus,
-    keyword: objectSearch.keyword,
-    pagination: objectPagination,
-  });
+    res.render("admin/pages/product/index.pug", {
+      pageTitle: "Trang danh sách sản phẩm",
+      products: product,
+      filterStatus: filterStatus,
+      keyword: objectSearch.keyword,
+      pagination: objectPagination,
+    });
 };
 
 // [PATCH] /admin/product/changeStatus/:status/:id
