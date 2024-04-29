@@ -1,25 +1,43 @@
 const Product_Category = require("../../models/products-category.model");
 const systemConfig = require("../../config/system");
 
+const createTreeHelper = require("../../helpers/create-tree");
+
 // [GET] /admin/products-category
 module.exports.product = async (req, res) => {
   let find = {
     deleted: false,
   };  
 
+  
+
   const danhmuc = await Product_Category.find(find)
+  const newDanhmuc = createTreeHelper.tree(danhmuc);
 
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    danhmuc: danhmuc
+    danhmuc: newDanhmuc
   });
 };
 
 // [GET] /admin/products-category/create
 module.exports.create = async (req, res) => {
+  let find = {
+    deleted: false
+  };
+
+
+
+  const danhmuc = await Product_Category.find(find);
+
+  const newDanhmuc = createTreeHelper.tree(danhmuc);
+
+  // console.log(newDanhmuc);
+
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Tạo danh mục sản phẩm",
+    danhmuc: newDanhmuc
   });
 };
 
