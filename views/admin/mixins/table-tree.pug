@@ -5,7 +5,7 @@ mixin table-tree(items, level = 1)
             td 
                 input(type="checkbox" name="id" value=item.id)
 
-            td #{index+1}
+            td #{item.index}
             td 
                 img(src=item.thumbnail,
                 alt=`Sản phẩm ${index+1}`
