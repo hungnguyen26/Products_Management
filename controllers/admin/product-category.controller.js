@@ -7,27 +7,22 @@ const createTreeHelper = require("../../helpers/create-tree");
 module.exports.product = async (req, res) => {
   let find = {
     deleted: false,
-  };  
+  };
 
-  
-
-  const danhmuc = await Product_Category.find(find)
+  const danhmuc = await Product_Category.find(find);
   const newDanhmuc = createTreeHelper.tree(danhmuc);
-
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
-    danhmuc: newDanhmuc
+    danhmuc: newDanhmuc,
   });
 };
 
 // [GET] /admin/products-category/create
 module.exports.create = async (req, res) => {
   let find = {
-    deleted: false
+    deleted: false,
   };
-
-
 
   const danhmuc = await Product_Category.find(find);
 
@@ -37,7 +32,7 @@ module.exports.create = async (req, res) => {
 
   res.render("admin/pages/products-category/create.pug", {
     pageTitle: "Tạo danh mục sản phẩm",
-    danhmuc: newDanhmuc
+    danhmuc: newDanhmuc,
   });
 };
 
@@ -54,4 +49,45 @@ module.exports.createPost = async (req, res) => {
   await productCategory.save(); // lưu vào database
 
   res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+};
+
+// [GET] /admin/products-category/edit/:id
+module.exports.edit = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const data = await Product_Category.findOne({
+      deleted: false,
+      _id: id,
+    });
+
+    const danhmuc = await Product_Category.find({
+      deleted: false,
+    });
+
+    const newDanhmuc = createTreeHelper.tree(danhmuc);
+
+    res.render("admin/pages/products-category/edit.pug", {
+      pageTitle: "Chỉnh sửa danh mục sản phẩm",
+      data: data,
+      danhmuc: newDanhmuc,
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`)
+  }
+};
+
+// [PATCH] /admin/products-category/edit/:id
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+
+  req.body.position = parseInt(req.body.position);
+
+  await Product_Category.updateOne(
+    {
+      _id: id,
+    },
+    req.body
+  );
+  res.redirect("back");
 };
