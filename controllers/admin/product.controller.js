@@ -4,6 +4,10 @@ const searchHelper = require("../../helpers/search");
 const paginationHelper = require("../../helpers/pagination");
 const systemConfig = require("../../config/system");
 
+const createTreeHelper = require("../../helpers/create-tree");
+const Product_Category = require("../../models/products-category.model");
+
+
 // [GET] /admin/product
 module.exports.product = async (req, res) => {
     //đoạn bộ lọc
@@ -140,8 +144,17 @@ module.exports.deleteItem = async (req, res) => {
 
 // [GET] /admin/product/create
 module.exports.create = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+
+  const danhmuc = await Product_Category.find(find);
+
+  const newDanhmuc = createTreeHelper.tree(danhmuc);
+
   res.render("admin/pages/product/create.pug", {
     pageTitle: "Thêm mới sản phẩm",
+    danhmuc: newDanhmuc
   });
 };
 
