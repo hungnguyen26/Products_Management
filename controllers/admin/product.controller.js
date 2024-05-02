@@ -189,9 +189,16 @@ module.exports.edit = async (req, res) => {
 
     const product = await Product.findOne(find);
 
+    const danhmuc = await Product_Category.find({
+      deleted: false,
+    });
+  
+    const newDanhmuc = createTreeHelper.tree(danhmuc);
+
     res.render("admin/pages/product/edit.pug", {
       pageTitle: "Chỉnh sửa sản phẩm",
       product: product,
+      danhmuc: newDanhmuc
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
