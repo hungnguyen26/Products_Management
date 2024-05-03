@@ -91,3 +91,22 @@ module.exports.editPatch = async (req, res) => {
   );
   res.redirect("back");
 };
+
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const find = {
+      deleted: false,
+      _id: req.params.id,
+    };
+
+    const danhmuc = await Product_Category.findOne(find);
+    console.log(danhmuc);
+    res.render("admin/pages/products-category/detail.pug", {
+      pageTitle: danhmuc.title,
+      danhmuc: danhmuc
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
+  }
+};

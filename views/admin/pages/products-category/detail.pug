@@ -1,0 +1,35 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1 Chi tiết danh mục
+
+    if(danhmuc.title)
+        h3(class="mb-4") #{danhmuc.title}
+
+    div(class="mb-4") Mô tả: <b>#{danhmuc.description}</b> 
+
+    if(danhmuc.thumbnail)
+        div(class="mb-4") Ảnh:
+            img(
+                src=danhmuc.thumbnail
+                style="width: 200px"
+            )  
+
+    if(danhmuc.status)
+        div(class="mb-4") 
+            span Trạng thái: 
+            if(danhmuc.status === "active")  
+                span(class="badge badge-success") Hoạt động
+            else    
+                span(class="badge badge-danger") Dừng hoạt động
+
+    if(danhmuc.position)
+        div(class="mb-4") Vị trí: <b>#{danhmuc.position}</b> 
+
+    a(
+        href=`${prefixadmin}/products-category/edit/${danhmuc.id}`
+        class="btn btn-warning"
+    ) Chỉnh sửa
+
+
+    
