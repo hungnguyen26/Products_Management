@@ -101,7 +101,7 @@ module.exports.detail = async (req, res) => {
     };
 
     const danhmuc = await Product_Category.findOne(find);
-    console.log(danhmuc);
+    // console.log(danhmuc);
     res.render("admin/pages/products-category/detail.pug", {
       pageTitle: danhmuc.title,
       danhmuc: danhmuc
@@ -109,4 +109,16 @@ module.exports.detail = async (req, res) => {
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
+};
+
+// [GET] /admin/products-category/delete/:id
+module.exports.delete = async (req, res) => {
+  const id = req.params.id;
+  await Product_Category.updateOne({ _id: id},{
+    deleted: true,
+    deletedAt: new Date(),
+  })
+
+  req.flash("success", `Xóa thành công  sản phẩm!`);
+  res.redirect("back")
 };

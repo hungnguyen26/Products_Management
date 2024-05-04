@@ -1,7 +1,11 @@
 extends ../../layouts/default.pug
 include ../../mixins/table-tree.pug
+include ../../mixins/alert.pug
+
 
 block main  
+    +alert-success("3000")
+
     h1 Danh Mục sản phẩm
 
     .card.mb-3
@@ -30,4 +34,30 @@ block main
                             th Trạng thái
                             th Hành động
                     tbody 
-                        +table-tree(danhmuc)
+                        +table-tree(danhmuc)    
+
+
+    form(
+        action=""
+        method="POST"
+        id="form-delete-item"
+        data-path=`${prefixadmin}/products-category/delete`)
+    
+    script.
+        const buttonsDelete = document.querySelectorAll("[button-delete]");
+        //- console.log(buttonsDelete);
+        buttonsDelete.forEach((button) => {
+            button.addEventListener("click", () => {
+                const isConfirm = confirm("Bạn có chắc muốn xóa sản phẩm này?");
+                if (isConfirm) {
+                    const id = button.getAttribute("data-id");
+                    const formDeleteItem = document.querySelector("#form-delete-item");
+                    const path = formDeleteItem.getAttribute("data-path");
+                    const action = path + `/${id}?_method=DELETE`;
+                    formDeleteItem.action = action;
+                    formDeleteItem.submit();
+                }
+            });
+        });
+
+
