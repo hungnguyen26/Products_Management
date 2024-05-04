@@ -63,7 +63,7 @@ module.exports.editPatch = async (req, res) => {
   res.redirect("back");
 };
 
-// [GET] admin/detail/:id
+// [GET] admin/roles/detail/:id
 module.exports.detail = async (req, res) => {
   try {
     let find ={
@@ -79,4 +79,21 @@ module.exports.detail = async (req, res) => {
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/roles`)
   }
+};
+
+// [DELETE] admin/roles/delete/:id
+module.exports.delete = async (req, res) => {
+  try {
+    let find ={
+      _id: req.params.id,
+    }
+    await Role.updateOne(find, {
+      deleted:true,
+      deletedAt: new Date(),
+    });
+    req.flash("success","Xóa nhóm quyền thành công!!")
+  } catch (error) {
+    req.flash("errorr","Xóa nhóm quyền thất bại!!")
+  }
+  res.redirect(`back`)
 };
