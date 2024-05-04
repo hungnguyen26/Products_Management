@@ -1,0 +1,31 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1 Chi tiết nhóm quyền
+
+    div(class="form-group")
+        label(for="title") Tiêu đề
+        input(
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            value= role.title
+        ) 
+    div(class="form-group")
+        label(for="desc") Mô tả
+        input(
+            type="text"
+            class="form-control"
+            id="desc"
+            name="description"
+            value= role.description
+        ) 
+    a(
+        href=`${prefixadmin}/roles/edit/${role.id}`
+        class="btn btn-warning"
+    ) Chỉnh sửa
+
+
+
+    

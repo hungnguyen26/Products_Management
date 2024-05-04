@@ -62,3 +62,21 @@ module.exports.editPatch = async (req, res) => {
   }
   res.redirect("back");
 };
+
+// [GET] admin/detail/:id
+module.exports.detail = async (req, res) => {
+  try {
+    let find ={
+      deleted: false,
+    }
+    
+    const role = await Role.findOne(find);
+
+    res.render("admin/pages/roles/detail.pug",{
+      pageTitle: role.title,
+      role: role
+    })
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/roles`)
+  }
+};
