@@ -9,7 +9,7 @@ const RolesSchema = new mongoose.Schema(
     nhomQuyen: {
       type: Array,
       default: []
-    },
+    },  
     deleted: {
       type: Boolean,
       default: false,

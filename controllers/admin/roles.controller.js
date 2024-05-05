@@ -66,34 +66,61 @@ module.exports.editPatch = async (req, res) => {
 // [GET] admin/roles/detail/:id
 module.exports.detail = async (req, res) => {
   try {
-    let find ={
+    let find = {
       deleted: false,
-    }
-    
+      _id: req.params.id,
+    };
+
     const role = await Role.findOne(find);
 
-    res.render("admin/pages/roles/detail.pug",{
+    res.render("admin/pages/roles/detail.pug", {
       pageTitle: role.title,
-      role: role
-    })
+      role: role,
+    });
   } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/roles`)
+    res.redirect(`${systemConfig.prefixAdmin}/roles`);
   }
 };
 
 // [DELETE] admin/roles/delete/:id
 module.exports.delete = async (req, res) => {
   try {
-    let find ={
+    let find = {
       _id: req.params.id,
-    }
+    };
     await Role.updateOne(find, {
-      deleted:true,
+      deleted: true,
       deletedAt: new Date(),
     });
-    req.flash("success","Xóa nhóm quyền thành công!!")
+    req.flash("success", "Xóa nhóm quyền thành công!!");
   } catch (error) {
-    req.flash("errorr","Xóa nhóm quyền thất bại!!")
+    req.flash("errorr", "Xóa nhóm quyền thất bại!!");
   }
-  res.redirect(`back`)
+  res.redirect(`back`);
+};
+
+// [GET] admin/roles/permissions
+module.exports.permissions = async (req, res) => {
+  let find = {
+    deleted: false,
+  };
+  const records = await Role.find(find);
+  res.render("admin/pages/roles/permissions.pug", {
+    pageTitle: "Phân quyền",
+    records: records,
+  });
+};
+
+// [PATCH] admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  try {
+    const phanquyen = JSON.parse(req.body.phanquyen);
+    for (const item of phanquyen) {
+      await Role.updateOne({ _id: item.id }, { nhomQuyen: item.phanquyen });
+    }
+    req.flash("success", "Cập nhật phân quyền thành công! ");
+  } catch (error) {
+    req.flash("error", "Cập nhật phân quyền thất bại! ");
+  }
+  res.redirect("back");
 };
