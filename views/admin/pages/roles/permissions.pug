@@ -61,6 +61,36 @@ block main
                         td(class="text-center") 
                             input(type="checkbox")
 
+                //- Phân quyền sản phẩm
+
+                tr  
+                    td(colspan="4")
+                        b Sản phẩm
+                tr(data-name="products_view")
+                    td Xem 
+                    each item in records
+                        td(class="text-center") 
+                            input(type="checkbox")
+                    
+                tr(data-name="products_create")
+                    td Thêm mới
+                    each item in records
+                        td(class="text-center") 
+                            input(type="checkbox")
+                    
+                tr(data-name="products_edit")
+                    td Chỉnh sửa 
+                    each item in records
+                        td(class="text-center") 
+                            input(type="checkbox")
+                    
+                tr(data-name="products_delete")
+                    td Xóa 
+                    each item in records
+                        td(class="text-center") 
+                            input(type="checkbox")
+            
+
     form(
         id="form-change-phanquyen"
         action=`${prefixadmin}/roles/permissions?_method=PATCH`
