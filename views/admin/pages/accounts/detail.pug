@@ -1,0 +1,60 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") Cập nhật tài khoản
+
+
+    if(acc) 
+            div(class="form-group")
+                label Họ tên *
+                input(
+                    type="text"
+                    class="form-control"
+                    value= acc.fullName
+                ) 
+            div(class="form-group")
+                label Email *
+                input(
+                    type="email"
+                    class="form-control"
+                    value= acc.email
+                ) 
+            div(class="form-group")
+                label Mật khẩu *
+                input(
+                    type="password"
+                    class="form-control"
+                    value=acc.password
+                ) 
+            div(class="form-group")
+                label Số điện thoại
+                input(
+                    type="text"
+                    class="form-control"
+                    value= acc.phone
+                ) 
+            div(class="form-group")
+                label(for="avatar") Avatar
+                img(
+                    src=acc.avatar
+                    upload-img-preview
+                    class="img-preview"
+                )
+
+
+            div(class="form-group")
+                label Phân quyền
+                select(class="form-control")
+                    option #{roles.title}
+            div(class="mb-4 ") 
+                span Trạng thái: 
+                if(acc.status === "active")  
+                    span(class="badge badge-success") Hoạt động
+                else    
+                    span(class="badge badge-danger") Dừng hoạt động
+            a(
+                href=`${prefixadmin}/accounts/edit/${acc.id}`
+                class="btn btn-warning"
+            ) Chỉnh sửa
+
+    

@@ -53,7 +53,7 @@ module.exports.createPost = async (req, res) => {
   }
 };
 
-// [GET] admin/edit/:id
+// [GET] admin/accounts/edit/:id
 module.exports.edit = async (req, res) => {
   let find = {
     _id: req.params.id,
@@ -74,11 +74,11 @@ module.exports.edit = async (req, res) => {
   }
 };
 
-// [PATCH] admin/edit/:id
+// [PATCH] admin/edit/accounts/:id
 module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
   const emailTonTai = await Account.findOne({
-    _id: { $ne: id},    // tìm những bản ghi có id không = id này
+    _id: { $ne: id }, // tìm những bản ghi có id không = id này
     email: req.body.email,
     deleted: false,
   });
@@ -95,4 +95,33 @@ module.exports.editPatch = async (req, res) => {
   }
 
   res.redirect("back");
+};
+
+// [GET] admin/detail/accounts/:id
+module.exports.detail = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    let find = {
+      _id: id,
+      deleted: false,
+    };
+
+    const acc = await Account.findOne(find);
+    
+
+    const role = await Role.findOne({
+      _id: acc.Role_id,
+      deleted: false,
+    });
+    console.log(acc);
+    console.log(role);
+    res.render("admin/pages/accounts/detail.pug", {
+      pageTitle: "Chi tiết tài khoản",
+      acc: acc,
+      roles:role
+    });
+  } catch (error) {
+    res.redirect(`${systemConfig.prefixAdmin}/accounts`);
+  }
 };
