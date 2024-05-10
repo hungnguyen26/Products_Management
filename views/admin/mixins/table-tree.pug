@@ -13,6 +13,7 @@ mixin table-tree(items, level = 1)
                 height="auto"
                 )
             td #{prefix} #{item.title}
+            
             td 
                 input(
                     type="number"
@@ -22,32 +23,44 @@ mixin table-tree(items, level = 1)
                     name="position"
                 )
             td 
-                if(item.status == "active")
-                    a(
-                        href="javascript:;"
-                        data-status=item.status   
-                        data-id=item.id
-                        button-changeStatus
-                        class="badge badge-success"
-                    ) Hoạt động
-                else
-                    a(
-                        href="javascript:;"
-                        data-status=item.status   
-                        data-id=item.id
-                        button-changeStatus
-                        class="badge badge-danger"
-                    ) Dừng hoạt động
-                
+                if(role.nhomQuyen.includes("products-category_edit"))   
+                    if(item.status == "active")
+                        a(
+                            href="javascript:;"
+                            data-status=item.status   
+                            data-id=item.id
+                            button-changeStatus
+                            class="badge badge-success"
+                        ) Hoạt động
+                    else
+                        a(
+                            href="javascript:;"
+                            data-status=item.status   
+                            data-id=item.id
+                            button-changeStatus
+                            class="badge badge-danger"
+                        ) Dừng hoạt động
+                else 
+                    if(item.status == "active")
+                        a(
+                            button-changeStatus
+                            class="badge badge-success"
+                        ) Hoạt động
+                    else
+                        a(
+                            button-changeStatus
+                            class="badge badge-danger"
+                        ) Dừng hoạt động
             td
                 a(
                     href= `${prefixadmin}/products-category/detail/${item.id}`
                     class="btn btn-secondary btn-sm"
                 ) Chi tiết
-                a(
-                    href= `${prefixadmin}/products-category/edit/${item.id}`
-                    class="btn btn-warning btn-sm"
-                ) Sửa
+                if(role.nhomQuyen.includes("products-category_edit"))   
+                    a(
+                        href= `${prefixadmin}/products-category/edit/${item.id}`
+                        class="btn btn-warning btn-sm"
+                    ) Sửa
                 button(
                     class="btn btn-danger btn-sm ml-1"
                     button-delete

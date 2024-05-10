@@ -2,36 +2,38 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
 
 block main 
-    h1(class="mb-4") Chỉnh sửa nhóm quyền 
+    if(role.nhomQuyen.includes("Role_edit"))           
 
-    +alert-success(3000)
-    +alert-error(3000)
+        h1(class="mb-4") Chỉnh sửa nhóm quyền 
 
-    form(
-        action=`${prefixadmin}/roles/edit/${data.id}?_method=PATCH`
-        method="post"
-    ) 
-        div(class="form-group")
-            label(for="title") Tiêu đề
-            input(
-                type="text"
-                class="form-control"
-                id="title"
-                name="title"
-                required
-                value= data.title
-            ) 
-        div(class="form-group")
-            label(for="desc") Mô tả
-            input(
-                type="text"
-                class="form-control"
-                id="desc"
-                name="description"
-                value= data.description
-            ) 
-        div(class="form-group")
-            button(
-                type="submit"
-                class="btn btn-primary"
-            ) Cập nhật
+        +alert-success(3000)
+        +alert-error(3000)
+
+        form(
+            action=`${prefixadmin}/roles/edit/${data.id}?_method=PATCH`
+            method="post"
+        ) 
+            div(class="form-group")
+                label(for="title") Tiêu đề
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                    value= data.title
+                ) 
+            div(class="form-group")
+                label(for="desc") Mô tả
+                input(
+                    type="text"
+                    class="form-control"
+                    id="desc"
+                    name="description"
+                    value= data.description
+                ) 
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật

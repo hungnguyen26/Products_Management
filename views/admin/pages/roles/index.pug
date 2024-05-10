@@ -2,73 +2,79 @@ extends ../../layouts/default.pug
 include ../../mixins/alert.pug
  
 block main 
-    h1(class="mb-4") Nhóm quyền
-
     +alert-success("3000")
 
-    .card.mb-3
-        .card-header Danh sách
-        .card-body
-            .row    
-                .col-8  
-                .col-4.text-right
-                    a(
-                        href=`${prefixadmin}/roles/create`
-                        class="btn btn-outline-success"
-                    ) + Thêm mới
-            table(
-                class="table table-hover table-sm"
-            )
-                thead 
-                    tr  
-                        th STT
-                        th Nhóm quyền
-                        th Mô tả ngắn
-                        th Hành động
-                tbody 
-                    if(danhmuc.length > 0)
-                        each item,index in danhmuc
-                            tr  
-                                td #{index + 1}
-                                td #{item.title}
-                                td #{item.description}
-                                td 
-                                    a(
-                                        class="btn btn-secondary btn-sm"
-                                        href=`${prefixadmin}/roles/detail/${item.id}`
-                                    ) Chi tiết
-                                    a(
-                                        class="btn btn-warning btn-sm ml-1"
-                                        href=`${prefixadmin}/roles/edit/${item.id}`
-                                    ) Sửa
-                                    button(
-                                        button-delete
-                                        data-id = item.id
-                                        class="btn btn-danger btn-sm ml-1"
-                                    ) Xóa
-                    else
-                        tr  
-                            td(colspan="4" class="text-center") Chưa có nhóm quyền nào được tạo.
-    
-    form(
-        action=""
-        method="POST"
-        id="form-delete-item"
-        data-path=`${prefixadmin}/roles/delete`)
+    if(role.nhomQuyen.includes("Role_view"))           
 
-    script.
-        const buttonsDelete = document.querySelectorAll("[button-delete]");
-        //- console.log(buttonsDelete);
-        buttonsDelete.forEach((button) => {
-            button.addEventListener("click", () => {
-                const isConfirm = confirm("Bạn có chắc muốn xóa sản phẩm này?");
-                if (isConfirm) {
-                    const id = button.getAttribute("data-id");
-                    const formDeleteItem = document.querySelector("#form-delete-item");
-                    const path = formDeleteItem.getAttribute("data-path");
-                    const action = path + `/${id}?_method=DELETE`;
-                    formDeleteItem.action = action;
-                    formDeleteItem.submit();
-                }
+        h1(class="mb-4") Nhóm quyền
+
+
+        .card.mb-3
+            .card-header Danh sách
+            .card-body
+                .row    
+                    .col-8  
+                    .col-4.text-right
+                        if(role.nhomQuyen.includes("Role_create")) 
+                            a(
+                                href=`${prefixadmin}/roles/create`
+                                class="btn btn-outline-success"
+                            ) + Thêm mới
+                table(
+                    class="table table-hover table-sm"
+                )
+                    thead 
+                        tr  
+                            th STT
+                            th Nhóm quyền
+                            th Mô tả ngắn
+                            th Hành động
+                    tbody 
+                        if(danhmuc.length > 0)
+                            each item,index in danhmuc
+                                tr  
+                                    td #{index + 1}
+                                    td #{item.title}
+                                    td #{item.description}
+                                    td 
+                                        a(
+                                            class="btn btn-secondary btn-sm"
+                                            href=`${prefixadmin}/roles/detail/${item.id}`
+                                        ) Chi tiết
+                                        if(role.nhomQuyen.includes("Role_edit")) 
+                                            a(
+                                                class="btn btn-warning btn-sm ml-1"
+                                                href=`${prefixadmin}/roles/edit/${item.id}`
+                                            ) Sửa
+                                        if(role.nhomQuyen.includes("Role_delete"))
+                                            button(
+                                                button-delete
+                                                data-id = item.id
+                                                class="btn btn-danger btn-sm ml-1"
+                                            ) Xóa
+                        else
+                            tr  
+                                td(colspan="4" class="text-center") Chưa có nhóm quyền nào được tạo.
+        
+        form(
+            action=""
+            method="POST"
+            id="form-delete-item"
+            data-path=`${prefixadmin}/roles/delete`)
+
+        script.
+            const buttonsDelete = document.querySelectorAll("[button-delete]");
+            //- console.log(buttonsDelete);
+            buttonsDelete.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const isConfirm = confirm("Bạn có chắc muốn xóa sản phẩm này?");
+                    if (isConfirm) {
+                        const id = button.getAttribute("data-id");
+                        const formDeleteItem = document.querySelector("#form-delete-item");
+                        const path = formDeleteItem.getAttribute("data-path");
+                        const action = path + `/${id}?_method=DELETE`;
+                        formDeleteItem.action = action;
+                        formDeleteItem.submit();
+                    }
+                });
             });
-        });

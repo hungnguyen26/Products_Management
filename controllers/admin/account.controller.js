@@ -114,8 +114,8 @@ module.exports.detail = async (req, res) => {
       _id: acc.Role_id,
       deleted: false,
     });
-    console.log(acc);
-    console.log(role);
+    // console.log(acc);
+    // console.log(role);
     res.render("admin/pages/accounts/detail.pug", {
       pageTitle: "Chi tiết tài khoản",
       acc: acc,
