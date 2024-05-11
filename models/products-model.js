@@ -22,11 +22,22 @@ const ProductSchema = new mongoose.Schema(
             slug: "title",
             unique: true
         },
+        createBy:{
+            accountID: String,
+            createdAt: {
+                type: Date,
+                default: Date.now  // lấy ra thời gian hiện tại
+            }
+        },
         deleted:{
             type: Boolean,
             default: false
         } ,
-        deletedAt: Date
+        // deletedAt: Date,
+        deletedBy:{
+            accountID: String,
+            deletedAt: Date
+        },
     },
     {
         timestamps: true    

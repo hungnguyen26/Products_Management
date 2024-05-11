@@ -15,6 +15,8 @@ const routerAdmin = require("./routes/admin/index.router");
 
 database.connect();
 
+var moment = require("moment");   //convert ngày 
+
 const app = express();
 const port = process.env.PORT;
 
@@ -34,6 +36,7 @@ app.use(flash());
 
 //app local variable
 app.locals.prefixadmin = systemConfix.prefixAdmin;
+app.locals.moment = moment;
 app.use(express.static(`${__dirname}/public`));
 
 app.use(methodOverride("_method"));

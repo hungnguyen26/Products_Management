@@ -58,6 +58,7 @@ block main
                                 th Giá
                                 th Vị trí 
                                 th Trạng thái
+                                th Người tạo
                                 th Hành động
                         tbody 
                             each item, index in products
@@ -106,6 +107,9 @@ block main
                                                 a(class="badge badge-success") Hoạt động
                                             else
                                                 a(class="badge badge-danger") Dừng hoạt động
+                                    td 
+                                        p #{item.accfullName}
+                                        p #{moment(item.createBy.createdAt).format("DD/MM/YYYY hh:mm:ss a")}
                                     td
                                         a(
                                             href= `${prefixadmin}/products/detail/${item.id}`

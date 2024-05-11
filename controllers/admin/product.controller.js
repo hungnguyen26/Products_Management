@@ -7,6 +7,7 @@ const systemConfig = require("../../config/system");
 const createTreeHelper = require("../../helpers/create-tree");
 const Product_Category = require("../../models/products-category.model");
 
+const Account = require("../../models/accounts.model");
 
 // [GET] /admin/product
 module.exports.product = async (req, res) => {
@@ -55,6 +56,15 @@ module.exports.product = async (req, res) => {
       .sort(sort)
       .limit(objectPagination.limitItem)
       .skip(objectPagination.skip); //limit là số lượng phần tử hiển thị
+
+    for (const pro of product) {
+      const user =  await Account.findOne({
+        _id: pro.createBy.accountID
+      });
+      if(user){
+        pro.accfullName = user.fullName
+      }
+    }
 
     res.render("admin/pages/product/index.pug", {
       pageTitle: "Trang danh sách sản phẩm",
@@ -171,7 +181,9 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-
+  req.body.createBy = {                    // thêm 1 key createBy
+    accountID : res.locals.user.id 
+  }
 
   const product = new Product(req.body); // tạo mới 1 sản phẩm
   await product.save(); // lưu vào database
