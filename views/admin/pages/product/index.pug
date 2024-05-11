@@ -59,6 +59,7 @@ block main
                                 th Vị trí 
                                 th Trạng thái
                                 th Người tạo
+                                th Người cập nhật
                                 th Hành động
                         tbody 
                             each item, index in products
@@ -110,6 +111,11 @@ block main
                                     td 
                                         p #{item.accfullName}
                                         p #{moment(item.createBy.createdAt).format("DD/MM/YYYY hh:mm:ss a")}
+                                    td 
+                                        -const updatedBy = item.updateBy[item.updateBy.length-1];
+                                        if(updatedBy)
+                                            p #{updatedBy.accfullName}
+                                            p #{moment(updatedBy.updateAt).format("DD/MM/YYYY hh:mm:ss a")}
                                     td
                                         a(
                                             href= `${prefixadmin}/products/detail/${item.id}`

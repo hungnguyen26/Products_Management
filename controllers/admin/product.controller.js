@@ -11,76 +11,94 @@ const Account = require("../../models/accounts.model");
 
 // [GET] /admin/product
 module.exports.product = async (req, res) => {
-    //đoạn bộ lọc
-    const filterStatus = filterStatusHelper(req.query);
-    //    console.log(filterStatus);
+  //đoạn bộ lọc
+  const filterStatus = filterStatusHelper(req.query);
+  //    console.log(filterStatus);
 
-    let find = {
-      deleted: false,
-    };
+  let find = {
+    deleted: false,
+  };
 
-    if (req.query.status) {
-      find.status = req.query.status; // truyển thêm 1 key status vào obj find
-    }
-    //end đoạn bộ lọc
+  if (req.query.status) {
+    find.status = req.query.status; // truyển thêm 1 key status vào obj find
+  }
+  //end đoạn bộ lọc
 
-    // phần tìm kiếm
-    const objectSearch = searchHelper(req.query);
-    if (objectSearch.regex) {
-      find.title = objectSearch.regex;
-    }
-    // end phần tìm kiếm
+  // phần tìm kiếm
+  const objectSearch = searchHelper(req.query);
+  if (objectSearch.regex) {
+    find.title = objectSearch.regex;
+  }
+  // end phần tìm kiếm
 
-    // phần phân trang
-    const countProduct = await Product.countDocuments(find); // đếm tổng số sản phẩm
-    let objectPagination = paginationHelper(
-      {
-        limitItem: 4, // sl phần tử mỗi trang
-        currentPage: 1,
-      },
-      req.query,
-      countProduct
-    );
-    // end phần phân trang
+  // phần phân trang
+  const countProduct = await Product.countDocuments(find); // đếm tổng số sản phẩm
+  let objectPagination = paginationHelper(
+    {
+      limitItem: 4, // sl phần tử mỗi trang
+      currentPage: 1,
+    },
+    req.query,
+    countProduct
+  );
+  // end phần phân trang
 
-    // sort
-    let sort = {};
-    if(req.query.sortKey && req.query.sortValue){
-      sort[req.query.sortKey] = req.query.sortValue;
-    }else{
-      sort.position = "desc";
-    }
-    // end sort
+  // sort
+  let sort = {};
+  if (req.query.sortKey && req.query.sortValue) {
+    sort[req.query.sortKey] = req.query.sortValue;
+  } else {
+    sort.position = "desc";
+  }
+  // end sort
 
-    const product = await Product.find(find)
-      .sort(sort)
-      .limit(objectPagination.limitItem)
-      .skip(objectPagination.skip); //limit là số lượng phần tử hiển thị
+  const product = await Product.find(find)
+    .sort(sort)
+    .limit(objectPagination.limitItem)
+    .skip(objectPagination.skip); //limit là số lượng phần tử hiển thị
 
-    for (const pro of product) {
-      const user =  await Account.findOne({
-        _id: pro.createBy.accountID
-      });
-      if(user){
-        pro.accfullName = user.fullName
-      }
-    }
-
-    res.render("admin/pages/product/index.pug", {
-      pageTitle: "Trang danh sách sản phẩm",
-      products: product,
-      filterStatus: filterStatus,
-      keyword: objectSearch.keyword,
-      pagination: objectPagination,
+  for (const pro of product) {
+    // lấy ra thông tin người tạo
+    const user = await Account.findOne({
+      _id: pro.createBy.accountID,
     });
+    if (user) {
+      pro.accfullName = user.fullName;
+    }
+
+    // lấy ra thông tin người cập nhật gần nhất
+    const updateBy = pro.updateBy[pro.updateBy.length-1];
+    if(updateBy){
+      const userUpdate = await Account.findOne({
+        _id: updateBy.accountID
+      });
+
+      updateBy.accfullName = userUpdate.fullName;
+    }
+    
+  }
+
+  res.render("admin/pages/product/index.pug", {
+    pageTitle: "Trang danh sách sản phẩm",
+    products: product,
+    filterStatus: filterStatus,
+    keyword: objectSearch.keyword,
+    pagination: objectPagination,
+  });
 };
 
 // [PATCH] /admin/product/changeStatus/:status/:id
 module.exports.changeStatus = async (req, res) => {
   const status = req.params.status;
   const id = req.params.id;
-
-  await Product.updateOne({ _id: id }, { status: status });
+  const updated = {
+    accountID: res.locals.user.id,
+    updateAt: new Date(),
+  };
+  await Product.updateOne({ _id: id },{ 
+    status: status,
+    $push: { updateBy: updated } 
+  });
 
   req.flash("success", "Cập nhật trạng thái sản phẩm thành công!");
 
@@ -91,17 +109,26 @@ module.exports.changeStatus = async (req, res) => {
 module.exports.changeMulti = async (req, res) => {
   const type = req.body.type;
   const ids = req.body.ids.split(", ");
-
+  const updated = {
+    accountID: res.locals.user.id,
+    updateAt: new Date(),
+  };
   switch (type) {
     case "active":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "active" });
+      await Product.updateMany({ _id: { $in: ids } }, { 
+        status: "active", 
+        $push: { updateBy: updated } 
+      });
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
       );
       break;
     case "inactive":
-      await Product.updateMany({ _id: { $in: ids } }, { status: "inactive" });
+      await Product.updateMany({ _id: { $in: ids } }, { 
+        status: "inactive",
+        $push: { updateBy: updated } 
+      });
       req.flash(
         "success",
         `Cập nhật trạng thái thành công ${ids.length} sản phẩm!`
@@ -112,10 +139,10 @@ module.exports.changeMulti = async (req, res) => {
         { _id: { $in: ids } },
         {
           deleted: true,
-          deletedBy:{
+          deletedBy: {
             accountID: res.locals.user.id,
-            deletedAt: new Date
-          }
+            deletedAt: new Date(),
+          },
         }
       );
       req.flash("success", `Xóa thành công ${ids.length} sản phẩm!`);
@@ -125,7 +152,10 @@ module.exports.changeMulti = async (req, res) => {
         let [id, position] = item.split("-");
         position = parseInt(position);
 
-        await Product.updateOne({ _id: id }, { position: position });
+        await Product.updateOne({ _id: id }, { 
+          position: position,
+          $push: { updateBy: updated } 
+        });
       }
       req.flash("success", `Đổi vị trí thành công ${ids.length} sản phẩm!`);
       break;
@@ -148,8 +178,8 @@ module.exports.deleteItem = async (req, res) => {
       deleted: true,
       deletedBy: {
         accountID: res.locals.user.id,
-        deletedAt: new Date
-      }
+        deletedAt: new Date(),
+      },
     }
   );
 
@@ -170,7 +200,7 @@ module.exports.create = async (req, res) => {
 
   res.render("admin/pages/product/create.pug", {
     pageTitle: "Thêm mới sản phẩm",
-    danhmuc: newDanhmuc
+    danhmuc: newDanhmuc,
   });
 };
 
@@ -187,9 +217,10 @@ module.exports.createPost = async (req, res) => {
     req.body.position = parseInt(req.body.position);
   }
 
-  req.body.createBy = {                    // thêm 1 key createBy
-    accountID : res.locals.user.id 
-  }
+  req.body.createBy = {
+    // thêm 1 key createBy
+    accountID: res.locals.user.id,
+  };
 
   const product = new Product(req.body); // tạo mới 1 sản phẩm
   await product.save(); // lưu vào database
@@ -210,13 +241,13 @@ module.exports.edit = async (req, res) => {
     const danhmuc = await Product_Category.find({
       deleted: false,
     });
-  
+
     const newDanhmuc = createTreeHelper.tree(danhmuc);
 
     res.render("admin/pages/product/edit.pug", {
       pageTitle: "Chỉnh sửa sản phẩm",
       product: product,
-      danhmuc: newDanhmuc
+      danhmuc: newDanhmuc,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
@@ -236,7 +267,17 @@ module.exports.editPatch = async (req, res) => {
   }
 
   try {
-    await Product.updateOne({ _id: id }, req.body);
+    const updated = {
+      accountID: res.locals.user.id,
+      updateAt: new Date(),
+    };
+    await Product.updateOne(
+      { _id: id },
+      {
+        ...req.body, // lấy ra những phần tử cũ
+        $push: { updateBy: updated }, // push vào mảng updateBy
+      }
+    );
     req.flash("success", `Cập nhật thành công sản phẩm!`);
   } catch (error) {
     req.flash("error", `Cập nhật thất bại!`);
@@ -259,7 +300,7 @@ module.exports.detail = async (req, res) => {
 
     res.render("admin/pages/product/detail.pug", {
       pageTitle: product.title,
-      product: product
+      product: product,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products`);
