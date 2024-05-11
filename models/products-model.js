@@ -33,11 +33,13 @@ const ProductSchema = new mongoose.Schema(
             type: Boolean,
             default: false
         } ,
-        // deletedAt: Date,
+
+
         deletedBy:{
             accountID: String,
             deletedAt: Date
         },
+        
     },
     {
         timestamps: true    
