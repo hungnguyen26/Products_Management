@@ -51,6 +51,11 @@ mixin table-tree(items, level = 1)
                             button-changeStatus
                             class="badge badge-danger"
                         ) Dừng hoạt động
+            td 
+                -const updatedBy = item.updateBy[item.updateBy.length-1];
+                if(updatedBy)
+                    p #{updatedBy.accfullName}
+                    p #{moment(updatedBy.updateAt).format("DD/MM/YYYY hh:mm:ss a")}
             td
                 a(
                     href= `${prefixadmin}/products-category/detail/${item.id}`

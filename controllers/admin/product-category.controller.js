@@ -3,6 +3,8 @@ const systemConfig = require("../../config/system");
 
 const createTreeHelper = require("../../helpers/create-tree");
 
+const Account = require("../../models/accounts.model");
+
 // [GET] /admin/products-category
 module.exports.product = async (req, res) => {
   let find = {
@@ -11,6 +13,18 @@ module.exports.product = async (req, res) => {
 
   const danhmuc = await Product_Category.find(find);
   const newDanhmuc = createTreeHelper.tree(danhmuc);
+
+  for (const dm of danhmuc) {
+    // lấy ra thông tin người cập nhật gần nhất
+    const updateBy = dm.updateBy[dm.updateBy.length - 1];
+    if (updateBy) {
+      const userUpdate = await Account.findOne({
+        _id: updateBy.accountID,
+      });
+
+      updateBy.accfullName = userUpdate.fullName;
+    }
+  }
 
   res.render("admin/pages/products-category/index.pug", {
     pageTitle: "Danh mục sản phẩm",
@@ -73,7 +87,7 @@ module.exports.edit = async (req, res) => {
       danhmuc: newDanhmuc,
     });
   } catch (error) {
-    res.redirect(`${systemConfig.prefixAdmin}/products-category`)
+    res.redirect(`${systemConfig.prefixAdmin}/products-category`);
   }
 };
 
@@ -82,12 +96,18 @@ module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
 
   req.body.position = parseInt(req.body.position);
-
+  const updated = {
+    accountID: res.locals.user.id,
+    updateAt: new Date(),
+  };
   await Product_Category.updateOne(
     {
       _id: id,
     },
-    req.body
+    {
+      ...req.body, // lấy ra những phần tử cũ
+      $push: { updateBy: updated }, // push vào mảng updateBy
+    }
   );
   res.redirect("back");
 };
@@ -104,7 +124,7 @@ module.exports.detail = async (req, res) => {
     // console.log(danhmuc);
     res.render("admin/pages/products-category/detail.pug", {
       pageTitle: danhmuc.title,
-      danhmuc: danhmuc
+      danhmuc: danhmuc,
     });
   } catch (error) {
     res.redirect(`${systemConfig.prefixAdmin}/products-category`);
@@ -114,11 +134,14 @@ module.exports.detail = async (req, res) => {
 // [GET] /admin/products-category/delete/:id
 module.exports.delete = async (req, res) => {
   const id = req.params.id;
-  await Product_Category.updateOne({ _id: id},{
-    deleted: true,
-    deletedAt: new Date(),
-  })
+  await Product_Category.updateOne(
+    { _id: id },
+    {
+      deleted: true,
+      deletedAt: new Date(),
+    }
+  );
 
   req.flash("success", `Xóa thành công  sản phẩm!`);
-  res.redirect("back")
+  res.redirect("back");
 };
