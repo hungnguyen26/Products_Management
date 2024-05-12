@@ -28,6 +28,7 @@ block main
                             th STT
                             th Nhóm quyền
                             th Mô tả ngắn
+                            th Người cập nhật
                             th Hành động
                     tbody 
                         if(danhmuc.length > 0)
@@ -36,6 +37,11 @@ block main
                                     td #{index + 1}
                                     td #{item.title}
                                     td #{item.description}
+                                    td 
+                                        -const updatedBy = item.updateBy[item.updateBy.length-1];
+                                        if(updatedBy)
+                                            p #{updatedBy.accfullName}
+                                            p #{moment(updatedBy.updateAt).format("DD/MM/YYYY hh:mm:ss a")}
                                     td 
                                         a(
                                             class="btn btn-secondary btn-sm"
