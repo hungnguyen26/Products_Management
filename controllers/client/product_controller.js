@@ -1,4 +1,5 @@
 const Product = require("../../models/products-model")
+const ProductsHelper = require("../../helpers/product");
 
 // [GET] product
 module.exports.product = async (req, res) => {
@@ -7,10 +8,7 @@ module.exports.product = async (req, res) => {
         deleted: false
     }).sort({position:"desc"});
 
-    const newProducts = products.map((item)=>{
-        item.priceNew = (item.price *(100-item.discountPercentage)/100).toFixed(0);
-        return item;
-    })
+    const newProducts = ProductsHelper.priceNewProducts(products);
 
     res.render("client/pages/product/index.pug",{
         pageTitle:"Trang danh sách sản phẩm",
