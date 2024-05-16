@@ -7,6 +7,6 @@ router.get('/', controller.product);
 
 router.get('/:slugCategory', controller.Category);
 
-// router.get('/:slug', controller.detail);
+router.get('/detail/:slugProduct', controller.detail);
 
 module.exports = router;

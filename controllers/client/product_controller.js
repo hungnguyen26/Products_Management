@@ -18,18 +18,28 @@ module.exports.product = async (req, res) => {
   });
 };
 
-// [GET] /product/:slug
+// [GET] /product/detail/:slugProduct
 module.exports.detail = async (req, res) => {
   try {
     const find = {
       deleted: false,
-      slug: req.params.slug,
+      slug: req.params.slugProduct,
       status: "active",
     };
 
     const product = await Product.findOne(find);
 
-    // console.log(product);
+    if(product.product_category_id){
+      const category = await ProductsCategory.findOne({
+        status:"active",
+        deleted:false,
+        _id: product.product_category_id
+      });
+
+      product.category = category;
+    }
+
+    product.priceNew =  ProductsHelper.priceNewProduct(product);
 
     res.render("client/pages/product/detail.pug", {
       pageTitle: product.title,
@@ -40,7 +50,7 @@ module.exports.detail = async (req, res) => {
   }
 };
 
-// [GET] /product/:slug
+// [GET] /product/:slugCategory
 module.exports.Category = async (req, res) => {
   const category = await ProductsCategory.findOne({
     slug: req.params.slugCategory,
@@ -64,8 +74,8 @@ module.exports.Category = async (req, res) => {
   };
 
   const listSubCategory = await getSubCategory(category.id);
-  const listSubCategoryId = listSubCategory.map(item=> item.id)
-  console.log(listSubCategoryId);
+  const listSubCategoryId = listSubCategory.map(item=> item.id);
+  // console.log(listSubCategoryId);
 
   const products = await Product.find({
     product_category_id: { $in: [category.id, ...listSubCategoryId] },
