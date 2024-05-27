@@ -136,7 +136,7 @@
 
 .no-underline {
   text-decoration: none;
-  color: black;
+  /* color: black; */
 }
 
 /* product detail */
