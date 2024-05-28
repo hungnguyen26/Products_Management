@@ -40,3 +40,22 @@ module.exports.forgotPasswordPost = (req, res, next) => {
   }
   next();
 };
+
+module.exports.resetPasswordPost = (req, res, next) => {
+  if (!req.body.password) {
+    req.flash("error", `Mật khẩu không được để trống!`);
+    res.redirect("back");
+    return;
+  }
+  if (!req.body.confirmPassword) {
+    req.flash("error", `Xác nhận lại mật khẩu!`);
+    res.redirect("back");
+    return;
+  }
+  if(req.body.password != req.body.confirmPassword){
+    req.flash("error", `Xác nhận mật khẩu không trùng khớp!`);
+    res.redirect("back");
+    return;
+  }
+  next();
+};
