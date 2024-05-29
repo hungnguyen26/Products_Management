@@ -1,13 +1,13 @@
 include ../mixins/sub-menu.pug
 
-header.Header
+header.Header   
     .container
         .row.align-items-center
             .col-3 
                 .inner-logo 
                     a(href="/")
-                        img(src="/img/logo.png", alt="Logo")
-            
+                        img(src=settingGeneral.logo, alt="Logo")
+                
             .col-5
                 form(
                     action="/search"

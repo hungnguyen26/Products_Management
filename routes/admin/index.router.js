@@ -6,6 +6,7 @@ const roles_router = require("./roles.router");
 const account_router = require("./account.router");
 const auth_router = require("./auth.router");
 const my_account = require("./my-account.router");
+const setting = require("./setting.router");
 
 const authMiddlewares = require("../../middlewares/admin/auth.middlewares");
 
@@ -41,4 +42,6 @@ module.exports = (app) => {
   app.use(PATH_ADMIN + "/auth", auth_router);
 
   app.use(PATH_ADMIN + "/my-account", authMiddlewares.requireAuth, my_account);
+
+  app.use(PATH_ADMIN + "/settings",  authMiddlewares.requireAuth, setting);
 };
