@@ -1,0 +1,40 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+
+    .container.my-3     
+        .row 
+            .col-12     
+                +box-head("Chat")
+
+        .row    
+            .col-12 
+                .chat   
+                    .inner-body
+                        .inner-incoming
+                            .inner-name Em yêu
+                            .inner-content
+                                | DSAKFS
+                        .inner-outcoming
+                            .inner-content
+                                | DSAKFS
+                        .inner-incoming
+                            .inner-name Em yêu
+                            .inner-content
+                                | DSdfsdfsdfsdfs
+                        .inner-outcoming
+                            .inner-content
+                                | DSAKsfasdFS
+                        .inner-incoming
+                            .inner-name Em yêu
+                            .inner-content
+                                | DSdfsdfsdsdsdsdfsdfssdsdddsrdefgsdgsdgsdfgsdgsdsd
+                    .inner-foot
+                        form(
+                            action="" 
+                            class="inner-form"
+                        ) 
+                            input(type="text" placeholder="Nhập nội dung..." name="content")
+                            button 
+                                i.fa-solid.fa-paper-plane

@@ -221,3 +221,98 @@
   cursor: pointer;
 }
 /* end thông báo */
+
+/* chat */
+.chat {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.chat .inner-body {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-bottom: 15px;
+}
+
+.inner-body .inner-incoming,
+.inner-body .inner-outcoming {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.inner-body .inner-incoming .inner-name {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.inner-body .inner-incoming .inner-content,
+.inner-body .inner-outcoming .inner-content {
+  background: #eee;
+  border-radius: 15px;
+  padding: 10px;
+  max-width: 70%;
+  word-wrap: break-word; /* Đây là thuộc tính giúp xử lý tin nhắn dài */
+  word-break: break-word; /* Nếu tin nhắn có từ quá dài thì sẽ tự động ngắt */
+  word-break: break-all; /* Thêm thuộc tính này để ngắt từ nếu cần */
+  white-space: pre-wrap; /* Giữ nguyên định dạng khoảng trắng và xuống dòng */
+}
+
+.inner-body .inner-incoming .inner-content {
+  align-self: flex-start;
+  background-color: #71f0b1bf;
+}
+
+.inner-body .inner-outcoming .inner-content {
+  align-self: flex-end;
+  background-color: #fe5da3;
+}
+
+.chat .inner-foot {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.chat .inner-form {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.chat .inner-form input {
+  flex: 1;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 0 10px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.chat .inner-form input:focus {
+  border-color: #fe5da3;
+}
+
+.chat .inner-form button {
+  border-radius: 15px;
+  border: 1px solid #fe5da3;
+  background: #fe5da3;
+  color: #fff;
+  height: 32px;
+  padding: 0 10px;
+  margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.chat .inner-form button:hover {
+  background-color: #e94e9b;
+  border-color: #e94e9b;
+}
+
+/* end chat */

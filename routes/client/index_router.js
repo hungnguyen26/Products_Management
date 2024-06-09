@@ -4,6 +4,7 @@ const search_router = require("./search.router");
 const cart_router = require("./cart.router");
 const checkout_router = require("./checkout.router");
 const user_router = require("./user.router");
+const chat_router = require("./chat.router");
 
 const categoryMidleware = require("../../middlewares/client/category.middleware");
 const cartMidleware = require("../../middlewares/client/cart.middleware");
@@ -27,4 +28,6 @@ module.exports = (app) => {
   app.use("/checkout", checkout_router);
 
   app.use("/user", user_router);
+
+  app.use("/chat", chat_router);
 };
