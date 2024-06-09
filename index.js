@@ -34,11 +34,8 @@ app.set("view engine", "pug");
 // socketIO
 const server = http.createServer(app);
 const io = new Server(server);
+global._io = io;          // _io là biến toàn cục
 
-io.on('connection', (socket) => {
-  console.log('a user connected',socket.id);
-
-});
 
 // khởi tạo thư viện flash: (hiển thị ra thông báo bên fe)
 app.use(cookieParser("dhdasjdhas"));

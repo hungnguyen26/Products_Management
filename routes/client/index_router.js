@@ -10,12 +10,13 @@ const categoryMidleware = require("../../middlewares/client/category.middleware"
 const cartMidleware = require("../../middlewares/client/cart.middleware");
 const userMidleware = require("../../middlewares/client/user.middleware");
 const SettingMidleware = require("../../middlewares/client/setting.middlewares");
+const authMiddleware = require("../../middlewares/client/auth.middlewares");
 
 module.exports = (app) => {
   app.use(categoryMidleware.category); // router nào cũng luôn luôn chạy qua midleware này
   app.use(cartMidleware.cartID); // router nào cũng luôn luôn chạy qua midleware này
-  app.use(userMidleware.infoUser); 
-  app.use(SettingMidleware.settingGeneral); 
+  app.use(userMidleware.infoUser);
+  app.use(SettingMidleware.settingGeneral);
 
   app.use("/", home_router);
 
@@ -29,5 +30,5 @@ module.exports = (app) => {
 
   app.use("/user", user_router);
 
-  app.use("/chat", chat_router);
+  app.use("/chat", authMiddleware.requireAuth, chat_router);
 };
