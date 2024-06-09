@@ -1,12 +1,15 @@
 const express = require("express");
 
-var methodOverride = require("method-override");
-var bodyParser = require("body-parser");
+const methodOverride = require("method-override");
+const bodyParser = require("body-parser");
 require("dotenv").config();
-var flash = require("express-flash");
+const flash = require("express-flash");
+const http = require('http');
+const { Server } = require("socket.io");
 
 const database = require("./config/database");
 const systemConfix = require("./config/system");
+
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
@@ -27,6 +30,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.set("views", `${__dirname}/views`);
 app.set("view engine", "pug");
+
+// socketIO
+const server = http.createServer(app);
+const io = new Server(server);
+
+io.on('connection', (socket) => {
+  console.log('a user connected',socket.id);
+
+});
 
 // khởi tạo thư viện flash: (hiển thị ra thông báo bên fe)
 app.use(cookieParser("dhdasjdhas"));
@@ -51,6 +63,6 @@ app.get("*",(req,res)=>{                      // * là cho tất cả TH còn l�
   }
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
