@@ -32,5 +32,17 @@ socket.on("SERVER_RETURN_MESS", (data) => {
     `;
 
   body.appendChild(div);
+ 
+  body.scrollTop = body.scrollHeight;    // hiển thị tin nhắn mới nhất
+
 });
 // end SERVER RETURN MESS
+
+
+
+/* luôn cuộn xuống tin nhắn mới nhất */
+const bodyChat = document.querySelector(".chat .inner-body");
+if(bodyChat){
+  bodyChat.scrollTop = bodyChat.scrollHeight;
+}
+/* end luôn cuộn xuống tin nhắn mới nhất */
