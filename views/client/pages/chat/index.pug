@@ -12,24 +12,26 @@ block main
             .col-12 
                 .chat   
                     .inner-body
-                        .inner-incoming
-                            .inner-name Em yêu
-                            .inner-content
-                                | DSAKFS
-                        .inner-outcoming
-                            .inner-content
-                                | DSAKFS
-                        .inner-incoming
-                            .inner-name Em yêu
-                            .inner-content
-                                | DSdfsdfsdfsdfs
-                        .inner-outcoming
-                            .inner-content
-                                | DSAKsfasdFS
-                        .inner-incoming
-                            .inner-name Em yêu
-                            .inner-content
-                                | DSdfsdfsdsdsdsdfsdfssdsdddsrdefgsdgsdgsdfgsdgsdsd
+                        each chat in chats
+                            div(class=(chat.inforUser.id == user.id ? "inner-outcoming":"inner-incoming"))
+                                if(chat.inforUser.id != user.id)
+                                    .inner-name #{chat.inforUser.fullName}
+                                .inner-content
+                                    | #{chat.content}  
+                        //- .inner-outcoming
+                        //-     .inner-content
+                        //-         | DSAKFS
+                        //- .inner-incoming
+                        //-     .inner-name Em yêu
+                        //-     .inner-content
+                        //-         | DSdfsdfsdfsdfs
+                        //- .inner-outcoming
+                        //-     .inner-content
+                        //-         | DSAKsfasdFS
+                        //- .inner-incoming
+                        //-     .inner-name Em yêu
+                        //-     .inner-content
+                        //-         | DSdfsdfsdsdsdsdfsdfssdsdddsrdefgsdgsdgsdfgsdgsdsd
                     .inner-foot
                         form(
                             action="" 
