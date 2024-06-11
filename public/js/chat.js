@@ -1,3 +1,5 @@
+import * as Popper from "https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js";
+
 // CLIENT SEND MESS
 const formSendData = document.querySelector(".chat .inner-form");
 if (formSendData) {
@@ -22,9 +24,9 @@ socket.on("SERVER_RETURN_MESS", (data) => {
   let htmlFullName = "";
   if (myID == data.userId) {
     div.classList.add("inner-outcoming");
-  }else{
+  } else {
     div.classList.add("inner-incoming");
-    htmlFullName=`<div class="inner-name">${data.fullName}</div>`
+    htmlFullName = `<div class="inner-name">${data.fullName}</div>`;
   }
   div.innerHTML = `
         ${htmlFullName}
@@ -32,17 +34,42 @@ socket.on("SERVER_RETURN_MESS", (data) => {
     `;
 
   body.appendChild(div);
- 
-  body.scrollTop = body.scrollHeight;    // hiển thị tin nhắn mới nhất
 
+  body.scrollTop = body.scrollHeight; // hiển thị tin nhắn mới nhất
 });
 // end SERVER RETURN MESS
 
-
-
 /* luôn cuộn xuống tin nhắn mới nhất */
 const bodyChat = document.querySelector(".chat .inner-body");
-if(bodyChat){
+if (bodyChat) {
   bodyChat.scrollTop = bodyChat.scrollHeight;
 }
 /* end luôn cuộn xuống tin nhắn mới nhất */
+
+// emoji-picker
+// hiển thị nút icon
+const buttonIcon = document.querySelector(".btn-icon");
+if (buttonIcon) {
+  const tooltip = document.querySelector(".tooltip");
+  Popper.createPopper(buttonIcon, tooltip);
+
+  buttonIcon.onclick = () => {
+    tooltip.classList.toggle("shown");
+  };
+}
+
+
+// chèn icon vào input
+const emojiPicker = document.querySelector("emoji-picker");
+if (emojiPicker) {
+  const inputChat = document.querySelector(
+    ".chat .inner-form input[name='content']"
+  );
+
+  emojiPicker.addEventListener("emoji-click", (e) => {
+    const icon = e.detail.unicode;
+    console.log(icon);
+    inputChat.value = inputChat.value + icon;
+  });
+}
+// end emoji-picker
