@@ -22,8 +22,12 @@ if (formSendData) {
       // gửi content hoặc ảnh lên server
       console.log(imgs);
 
-      socket.emit("CLIENT_SEND_MESS", content);
+      socket.emit("CLIENT_SEND_MESS", {
+        content:content,
+        imgs:imgs
+      });
       e.target.elements.content.value = "";
+      upload.resetPreviewPanel();
       socket.emit("CLIENT_SEND_TYPING", "hidden");
     }
   });

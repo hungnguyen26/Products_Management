@@ -8,11 +8,13 @@ module.exports.index = async (req, res) => {
     const fullName = res.locals.user.fullName;
     // SocketIO
     _io.once('connection', (socket) => {
-        socket.on("CLIENT_SEND_MESS", async (content)=>{
+        socket.on("CLIENT_SEND_MESS", async (data)=>{
+          console.log(data.imgs);
           // khi có data thì lưu vào db
           const chat = new Chat({
             user_id: user_id,
-            content: content
+            content: data.content,
+            images: data.imgs
           });
           await chat.save();
 
@@ -20,7 +22,7 @@ module.exports.index = async (req, res) => {
           _io.emit("SERVER_RETURN_MESS",{
             userId: user_id,
             fullName: fullName,
-            content: content
+            data: data
           });
         });
 
