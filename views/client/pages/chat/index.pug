@@ -20,23 +20,19 @@ block main
                                     | #{chat.content}  
                         div(class="inner-list-typing")
                             div(class="box-typing")
-                                //- div(class="inner-name") Lê Văn A 
-                                //- div(class="inner-dots")
-                                //-     span 
-                                //-     span 
-                                //-     span 
-                                //- div(class="inner-name") Lê Văn B
-                                //- div(class="inner-dots")
-                                //-     span 
-                                //-     span 
-                                    span 
+                               
+                    .inner-previewImg
+                        div(class="custom-file-container" data-upload-id="upload-img")
                     .inner-foot
                         form(
                             action="" 
                             class="inner-form"
                         ) 
                             input(type="text" placeholder="Nhập nội dung..." name="content")
-                            div(class="custom-file-container" data-upload-id="upload-img")
+                            label(
+                                class=" btn btn-light"
+                                for="file-upload-with-preview-upload-img"
+                            ) <i class="fa-solid fa-image"></i>
                             span(class="btn-icon btn btn-light") 
                                 i(class="fas fa-smile")
                             button 

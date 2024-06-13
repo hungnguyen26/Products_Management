@@ -314,7 +314,24 @@
   background-color: #e94e9b;
   border-color: #e94e9b;
 }
-
+.chat .inner-previewImg{
+  position: relative;
+}
+.chat .inner-previewImg .label-container{ 
+  display: none;
+}
+.chat .inner-previewImg .input-container{ 
+  display: none;
+}
+.chat .inner-previewImg .image-preview{ 
+  height: auto;
+  padding: 0;
+  border-radius: 0;
+}
+.chat .inner-previewImg .image-preview-item{ 
+  width: 90px;
+  background-size: contain;
+}
 /* end chat */
 
  /* emoji-picker */
