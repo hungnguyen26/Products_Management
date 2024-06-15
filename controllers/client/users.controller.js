@@ -1,19 +1,35 @@
-const User = require("../../models/users.model")
+const User = require("../../models/users.model");
+
+const userSocket = require("../../sockets/client/users.socket");
 
 // [GET] /user/not-friend
 module.exports.notFriend = async (req, res) => {
-    const userId = res.locals.user.id;
+  // socket
+  userSocket(res);
+  // end socket
 
-    const users = await User.find({
-        _id: {$ne:userId},     // trừ userId đã tồn tại
-        deleted:false,
-        status:"active"
-    }).select("avatar fullName")
+  const userId = res.locals.user.id;
 
+  const myUser = await User.findOne({
+    _id: userId,
+  });
 
-    // console.log(users);
-    res.render("client/pages/users/not-friend.pug", {
-      pageTitle: "Danh sách người dùng",
-      users:users
-    });
-  };
+  const requestFriends = myUser.requestFriends;
+  const acceptFriends = myUser.acceptFriends;
+
+  const users = await User.find({
+    $and: [
+      { _id: { $ne: userId } }, 
+      { _id: { $nin: requestFriends } },
+      { _id: { $nin: acceptFriends } },
+    ],
+    deleted: false,
+    status: "active",
+  }).select("avatar fullName");
+
+  // console.log(users);
+  res.render("client/pages/users/not-friend.pug", {
+    pageTitle: "Danh sách người dùng",
+    users: users,
+  });
+};
