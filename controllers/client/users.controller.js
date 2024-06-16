@@ -39,7 +39,7 @@ module.exports.request = async (req, res) => {
   // socket
   userSocket(res);
   // end socket
-  
+
   const userId = res.locals.user.id;
   const myUserId = await User.findOne({
     _id: userId
@@ -55,6 +55,31 @@ module.exports.request = async (req, res) => {
 
   res.render("client/pages/users/request.pug", {
     pageTitle: "Lời mời đã gửi",
+    users:users
+  });
+};
+
+// [GET] /user/accept
+module.exports.accept = async (req, res) => {
+  // socket
+  userSocket(res);
+  // end socket
+  
+  const userId = res.locals.user.id;
+  const myUserId = await User.findOne({
+    _id: userId
+  })
+
+  const acceptFriends = myUserId.acceptFriends;
+
+  const users = await User.find({
+    _id: { $in: acceptFriends},
+    deleted:false,
+    status:"active"
+  }).select("id avatar fullName");
+
+  res.render("client/pages/users/accept.pug", {
+    pageTitle: "Lời mời đã nhận",
     users:users
   });
 };

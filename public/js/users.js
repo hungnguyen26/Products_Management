@@ -29,3 +29,20 @@ if(listBtnCancelFriend.length > 0){
     })
 }
 // end chức năng HỦY gửi yêu cầu
+
+// chức năng từ chối kết bạn
+const listBtnTuChoiFriend = document.querySelectorAll("[btn-remove-friend]");
+if(listBtnTuChoiFriend.length > 0){
+    listBtnTuChoiFriend.forEach((btn)=>{
+        btn.addEventListener("click",()=>{
+            btn.closest(".box-user").classList.add("remove"); 
+
+            const userId = btn.getAttribute("btn-remove-friend");
+            // console.log(userId);
+
+            socket.emit("CLIENT_REMOVE_FRIEND",userId);
+
+        })
+    })
+}
+// end chức năng từ chối kết bạn

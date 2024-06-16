@@ -70,5 +70,39 @@ module.exports = async (res)=>{
             }
 
         });
+
+        // người dùng TỪ CHÓI yêu cầu kết bạn   
+        socket.on("CLIENT_REMOVE_FRIEND", async (userId)=>{
+            const myUserId = res.locals.user.id;
+
+            // console.log(myUserId);  // ID của B
+            // console.log(userId);    // ID của A
+
+            // Xóa id của A trong acceptFriends của B
+            const existUserAinB = await Users.findOne({
+                _id:myUserId,
+                acceptFriends: userId
+            });
+            if(existUserAinB){
+                await Users.updateOne({
+                    _id: myUserId
+                },{
+                    $pull: { acceptFriends : userId}          
+                });
+            }
+            // Xóa id của B trong requestFriends của A
+            const existUserBinA = await Users.findOne({
+                _id:userId,
+                requestFriends: myUserId
+            });
+            if(existUserBinA){
+                await Users.updateOne({
+                    _id: userId
+                },{
+                    $pull: { requestFriends : myUserId}
+                });
+            }
+
+        });
     });
 }

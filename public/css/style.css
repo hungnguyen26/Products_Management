@@ -426,4 +426,17 @@
 .box-user.add [btn-cancel-friend] {
   display: inline-block;
 }
+
+.box-user [btn-deleted-friend] {
+  display: none;
+}
+.box-user.remove [btn-accept-friend] {
+  display: none;
+}
+.box-user.remove [btn-remove-friend] {
+  display: none;
+}
+.box-user.remove [btn-deleted-friend] {
+  display: inline-block;
+}
 /* end box-user */
