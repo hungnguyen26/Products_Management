@@ -3,7 +3,7 @@ const Users = require("../../models/users.model");
 module.exports = async (res)=>{
     _io.once('connection', (socket) => {
 
-        // người dùng hủy gửi yêu cầu kết bạn
+        // người dùng  gửi yêu cầu kết bạn
         socket.on("CLIENT_ADD_FRIEND", async (userId)=>{
             const myUserId = res.locals.user.id;
 
@@ -35,6 +35,16 @@ module.exports = async (res)=>{
                 });
             }
 
+            // lấy độ dài acceptFriends của B trả về cho B
+            const infoUserB = await Users.findOne({
+                _id: userId
+            });
+            const lengthAcceptFriends =  infoUserB.acceptFriends.length;
+
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPTFRIEND",{
+                userId:userId,
+                lengthAcceptFriends:lengthAcceptFriends,
+            });
         });
 
         // người dùng HỦY gửi yêu cầu kết bạn   
