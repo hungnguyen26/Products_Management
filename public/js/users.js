@@ -46,3 +46,20 @@ if(listBtnTuChoiFriend.length > 0){
     })
 }
 // end chức năng từ chối kết bạn
+
+// chức năng chấp nhận kết bạn
+const listBtnChapNhanFriend = document.querySelectorAll("[btn-accept-friend]");
+if(listBtnChapNhanFriend.length > 0){
+    listBtnChapNhanFriend.forEach((btn)=>{
+        btn.addEventListener("click",()=>{
+            btn.closest(".box-user").classList.add("accepted"); 
+
+            const userId = btn.getAttribute("btn-accept-friend");
+            // console.log(userId);
+
+            socket.emit("CLIENT_ACCEPT_FRIEND",userId);
+
+        })
+    })
+}
+// end chức năng chấp nhận kết bạn

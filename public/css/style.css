@@ -439,4 +439,17 @@
 .box-user.remove [btn-deleted-friend] {
   display: inline-block;
 }
+
+.box-user [btn-accepted-friend] {
+  display: none;
+}
+.box-user.accepted [btn-accept-friend] {
+  display: none;
+}
+.box-user.accepted [btn-remove-friend] {
+  display: none;
+}
+.box-user.accepted [btn-accepted-friend] {
+  display: inline-block;
+}
 /* end box-user */
