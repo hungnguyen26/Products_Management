@@ -84,7 +84,7 @@ module.exports = async (res)=>{
             if(existUserBinA){
                 await Users.updateOne({
                     _id: myUserId
-                },{
+                },{ 
                     $pull: { requestFriends : userId}
                 });
             }
@@ -97,6 +97,12 @@ module.exports = async (res)=>{
             socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPTFRIEND",{
                 userId:userId,
                 lengthAcceptFriends:lengthAcceptFriends,
+            });
+
+            // lấy userId của A để trả về cho B
+            socket.broadcast.emit("SERVER_RETURN_USERID_CANCEL_FRIEND",{
+                userId:userId,
+                userIdA:myUserId
             });
         });
 
