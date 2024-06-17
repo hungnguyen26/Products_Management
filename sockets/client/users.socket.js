@@ -78,7 +78,16 @@ module.exports = async (res)=>{
                     $pull: { requestFriends : userId}
                 });
             }
+            // lấy độ dài acceptFriends của B trả về cho B
+            const infoUserB = await Users.findOne({
+                _id: userId
+            });
+            const lengthAcceptFriends =  infoUserB.acceptFriends.length;
 
+            socket.broadcast.emit("SERVER_RETURN_LENGTH_ACCEPTFRIEND",{
+                userId:userId,
+                lengthAcceptFriends:lengthAcceptFriends,
+            });
         });
 
         // người dùng TỪ CHÓI yêu cầu kết bạn   
