@@ -102,8 +102,12 @@ module.exports.friend = async (req, res) => {
     _id: { $in: FriendsListId},
     deleted:false,
     status:"active"
-  }).select("id avatar fullName statusOnline");
+  }).select("id avatar fullName statusOnline ");
 
+  users.forEach(user => {
+    const infoUser = FriendsList.find(item => item.user_id == user.id);
+    user.roomchatid = infoUser.room_chat_id;
+  })
 
   res.render("client/pages/users/friend.pug", {
     pageTitle: "Danh sách bạn bè",
