@@ -69,8 +69,13 @@ module.exports.loginPost = async (req, res) => {
   
   res.cookie("tokenUser", user.tokenUser);
 
+  // đăng nhập thành công sẽ lưu vào db là "online"
   await User.updateOne({_id:user.id},{
     statusOnline: "online"
+  });
+
+  _io.once('connection', (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_ONLINE", user.id);
   });
 
   // lưu userId vào collection carts 
@@ -87,6 +92,9 @@ module.exports.loginPost = async (req, res) => {
 module.exports.logout = async (req, res) => {
   await User.updateOne({_id:res.locals.user.id},{
     statusOnline: "offline"
+  });
+  _io.once('connection', (socket) => {
+    socket.broadcast.emit("SERVER_RETURN_USER_OFFLINE",res.locals.user.id);
   });
 
   res.clearCookie("tokenUser"); // xóa cookie để đăng xuats
