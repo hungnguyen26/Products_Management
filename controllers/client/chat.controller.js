@@ -1,5 +1,6 @@
 const Chat = require("../../models/chats.model");
 const User = require("../../models/users.model");
+const Roomchat = require("../../models/rooms-chat.model");
 
 
 // [GET] /chat/:idRoomChat
@@ -57,8 +58,16 @@ module.exports.index = async (req, res) => {
     }
 
 
+    const idRoom = req.params.idRoomChat;
+    const room = await Roomchat.findOne({
+      _id:idRoom
+    })
+
+    const titleRoomChat = room.title;
+
     res.render("client/pages/chat/index.pug", {
         pageTitle: "Chat",
-        chats: chats
+        chats: chats,
+        titleRoomChat:titleRoomChat
       });
 };
